@@ -39,17 +39,14 @@ namespace Training.Plugins
             try
             {
                 getChatlog(service, chatPost.GetAttributeValue<EntityReference>("xrm_consultant"), chatPost.GetAttributeValue<EntityReference>("xrm_jobseeker"));
-                chatPost["xrm_chat"] = new EntityReference
-                    ("xrm_chatlog", getChatlog(service, chatPost.GetAttributeValue<EntityReference>("xrm_consultant"), chatPost.GetAttributeValue<EntityReference>("xrm_jobseeker")).Id);
             }
 
             catch (ArgumentOutOfRangeException)
             {
                 createChatlog(service, chatPost.GetAttributeValue<EntityReference>("xrm_consultant"), chatPost.GetAttributeValue<EntityReference>("xrm_jobseeker"));
-                chatPost["xrm_chat"] = new EntityReference
-                    ("xrm_chatlog", getChatlog(service, chatPost.GetAttributeValue<EntityReference>("xrm_consultant"), chatPost.GetAttributeValue<EntityReference>("xrm_jobseeker")).Id);
             }
-
+            chatPost["xrm_chat"] = new EntityReference
+                    ("xrm_chatlog", getChatlog(service, chatPost.GetAttributeValue<EntityReference>("xrm_consultant"), chatPost.GetAttributeValue<EntityReference>("xrm_jobseeker")).Id);
 
         }
 
