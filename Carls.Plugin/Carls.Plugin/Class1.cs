@@ -53,6 +53,13 @@ namespace Training.Plugins
         private void createChatlog(IOrganizationService service, EntityReference consultant, EntityReference jobseeker)
         {
             Entity chatlog = new Entity("xrm_chatlog");
+
+            Entity consultantEntity = service.Retrieve(consultant.LogicalName, consultant.Id, new ColumnSet("fullname"));
+            Entity jobseekerEntity = service.Retrieve(jobseeker.LogicalName, jobseeker.Id, new ColumnSet("xrm_name"));
+
+            String chatName = consultantEntity.GetAttributeValue<String>("fullname") + " and " + jobseekerEntity.GetAttributeValue<String>("xrm_name");
+
+            chatlog["xrm_name"] = chatName;
             chatlog["xrm_consultant"] = consultant;
             chatlog["xrm_jobseeker"] = jobseeker;
             service.Create(chatlog);
@@ -70,11 +77,11 @@ namespace Training.Plugins
             query.Criteria.FilterOperator = LogicalOperator.And;
             query.Criteria.Conditions.Add
             (
-                new ConditionExpression("xrm_consultant", ConditionOperator.Equal, consultant)
+                new ConditionExpression("xrm_consultant", ConditionOperator.Equal, consultant.Id)
             );
             query.Criteria.Conditions.Add
             (
-                new ConditionExpression("xrm_jobseeker", ConditionOperator.Equal, jobseeker)
+                new ConditionExpression("xrm_jobseeker", ConditionOperator.Equal, jobseeker.Id)
             );   
             EntityCollection entities = service.RetrieveMultiple(query);
 
