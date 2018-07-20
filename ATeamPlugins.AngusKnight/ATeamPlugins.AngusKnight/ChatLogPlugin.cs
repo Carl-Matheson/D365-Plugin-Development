@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-namespace Training.Plugins
+namespace ATeamPlugins.AngusKnight
 {
-    public class ValidationPlugin : IPlugin
+    public class ChatLogPlugin : IPlugin
     {
 
         public void Execute(IServiceProvider serviceProvider)
@@ -34,6 +34,7 @@ namespace Training.Plugins
                 EntityReference jobseeker = new EntityReference("xrm_applicant", getJobseeker(service, chatPost.GetAttributeValue<String>("resco_name")).Id);
                 chatPost["xrm_jobseeker"] = jobseeker;
             }
+
 
 
             try

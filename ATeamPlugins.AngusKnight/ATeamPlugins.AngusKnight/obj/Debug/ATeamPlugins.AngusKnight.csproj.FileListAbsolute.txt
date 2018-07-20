@@ -1,0 +1,11 @@
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\obj\Debug\ATeamPlugins.AngusKnight.csprojAssemblyReference.cache
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\obj\Debug\ATeamPlugins.AngusKnight.csproj.CoreCompileInputs.cache
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\ATeamPlugins.AngusKnight.dll
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\ATeamPlugins.AngusKnight.pdb
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\Microsoft.Xrm.Sdk.dll
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\bin\Debug\Microsoft.Xrm.Sdk.xml
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\obj\Debug\ATeamPlugins.AngusKnight.csproj.CopyComplete
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\obj\Debug\ATeamPlugins.AngusKnight.dll
+C:\dev\ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight\obj\Debug\ATeamPlugins.AngusKnight.pdb

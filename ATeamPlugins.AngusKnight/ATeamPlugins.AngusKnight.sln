@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carls.Plugin", "Carls.Plugin\Carls.Plugin.csproj", "{15C01A31-423D-4052-8C3A-45CB435E1B25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATeamPlugins.AngusKnight", "ATeamPlugins.AngusKnight\ATeamPlugins.AngusKnight.csproj", "{3FA53622-669E-41A2-842D-266EE5C0DCF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{15C01A31-423D-4052-8C3A-45CB435E1B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15C01A31-423D-4052-8C3A-45CB435E1B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15C01A31-423D-4052-8C3A-45CB435E1B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15C01A31-423D-4052-8C3A-45CB435E1B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA53622-669E-41A2-842D-266EE5C0DCF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA53622-669E-41A2-842D-266EE5C0DCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA53622-669E-41A2-842D-266EE5C0DCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA53622-669E-41A2-842D-266EE5C0DCF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {117A6045-9C32-48AA-B0B2-8431CA8CB414}
+		SolutionGuid = {4B4298C6-DD38-4FCD-B852-D00795D53284}
 	EndGlobalSection
 EndGlobal
