@@ -52,12 +52,8 @@ namespace Training.Plugins
             {
                 jobseeker["xrm_contracttype"] = "Minutes";
                 service.Update(jobseeker);
-                EntityCollection nonActualizedRecords = getTheNonActualizedRecords(service, jobseeker, numberOfIterations);
-                for (int i = 0; i < nonActualizedRecords.TotalRecordCount; i++)
-                {
-                    nonActualizedRecords[i]["xrm_name"] = "TEST";
-                    service.Update(nonActualizedRecords[i]);
-                }
+                Entity nonActualizedRecords = getTheNonActualizedRecords(service, jobseeker, numberOfIterations);
+                service.Update(nonActualizedRecords);
             }
         }
 
@@ -90,7 +86,7 @@ namespace Training.Plugins
         }
 
         // Filter for non-actualized records
-        private static EntityCollection getTheNonActualizedRecords(IOrganizationService service, Entity jobseeker, int numberOfIterations)
+        private static Entity getTheNonActualizedRecords(IOrganizationService service, Entity jobseeker, int numberOfIterations)
         {
             // Snippet for querying records
             QueryExpression query = new QueryExpression();
@@ -114,7 +110,7 @@ namespace Training.Plugins
 
             EntityCollection entities = service.RetrieveMultiple(query);
 
-            return entities;
+            return entities[0];
         }
 
         private void createEntity(IOrganizationService service, Entity jobseeker, String jobseekerId, int week, int numberOfIterations)
@@ -127,6 +123,7 @@ namespace Training.Plugins
             PPSWeek["xrm_weekplugin"] = week;
             PPSWeek["xrm_weekactual"] = (week + 1);
             PPSWeek["xrm_ppsiterations"] = numberOfIterations;
+            PPSWeek["xrm_iterationstatus"] = false;
             PPSWeek["xrm_date"] = DateTime.Now; 
             // Linking the PPSTable
             EntityReference ppstableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
