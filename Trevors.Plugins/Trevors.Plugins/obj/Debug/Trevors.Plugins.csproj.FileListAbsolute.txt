@@ -1,0 +1,11 @@
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Trevors.Plugins.dll
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Trevors.Plugins.pdb
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Xrm.Sdk.dll
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Xrm.Sdk.xml
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csprojAssemblyReference.cache
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csproj.CoreCompileInputs.cache
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csproj.CopyComplete
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.dll
+C:\Users\New\source\repos\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.pdb
