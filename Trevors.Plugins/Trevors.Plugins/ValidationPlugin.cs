@@ -50,10 +50,6 @@ namespace Training.Plugins
             // Deletion
             else if (currentWeeks < previousWeeks)
             {
-                jobseeker["xrm_contracttype"] = "Minutes";
-                service.Update(jobseeker);
-                Entity nonActualizedRecords = getTheNonActualizedRecords(service, jobseeker, numberOfIterations);
-                service.Update(nonActualizedRecords);
             }
         }
 
@@ -123,8 +119,9 @@ namespace Training.Plugins
             PPSWeek["xrm_weekplugin"] = week;
             PPSWeek["xrm_weekactual"] = (week + 1);
             PPSWeek["xrm_ppsiterations"] = numberOfIterations;
-            PPSWeek["xrm_iterationstatus"] = false;
-            PPSWeek["xrm_date"] = DateTime.Now; 
+            PPSWeek["xrm_iterationstatus"] = true;
+            PPSWeek["xrm_date"] = DateTime.Now;
+            PPSWeek["xrm_actualhours"] = 0m; 
             // Linking the PPSTable
             EntityReference ppstableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
             PPSWeek["xrm_ppstable"] = ppstableValue;
