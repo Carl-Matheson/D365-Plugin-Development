@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 namespace Training.Plugins
 {
-    /* Occurs onUpdate of Current Week field */
+    /* Occurs onUpdate of weeks employed */
 
     public class ValidationPlugin : IPlugin
     {
@@ -18,19 +18,22 @@ namespace Training.Plugins
             Entity jobseeker = (Entity)context.InputParameters["Target"];
 
             // Creating Images
-            Entity postJobseeker = (Entity)context.PostEntityImages["Image"];
+            //Entity postJobseeker = (Entity)context.PostEntityImages["Image"];
             Entity preJobseeker = (Entity)context.PreEntityImages["Image"];
 
             // From Target
             String jobseekerId = jobseeker.GetAttributeValue<String>("xrm_name");
-            int numberOfServiceWeeks = jobseeker.GetAttributeValue<int>("xrm_weeksemployed");
+            int currentWeeks = jobseeker.GetAttributeValue<int>("xrm_weeksemployed");
+
+            int numberOfWeeksEmployed = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
+            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; //.ToString();
 
             // From Pre Image
-            int currentWeeks = postJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
-            int previousWeeks = postJobseeker.GetAttributeValue<int>("xrm_previousweeksemployed");
+            int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
+            //int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_previousweeksemployed");
 
             // From Post Image
-            int numberOfIterations = postJobseeker.GetAttributeValue<int>("xrm_ppsiterations");
+            int numberOfIterations = preJobseeker.GetAttributeValue<int>("xrm_ppsiterations");
 
             //PPS Table Reference
             EntityReference PPSTableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
@@ -57,11 +60,11 @@ namespace Training.Plugins
             Money fourthAmount = PPSTable.GetAttributeValue<Money>("xrm_52wkoutcome");
 
             jobseeker["xrm_contracttype"] = previousWeeks.ToString();
-
+            
             // Creation of PPS Weeks records
-            if (postJobseeker.Contains("xrm_pps") && postJobseeker.GetAttributeValue<bool>("xrm_pps") && previousWeeks < currentWeeks)
+            if (preJobseeker.Contains("xrm_pps") && preJobseeker.GetAttributeValue<bool>("xrm_pps") && previousWeeks < currentWeeks)
             {
-                for (int i = 0; i < numberOfServiceWeeks; i++)
+                for (int i = 0; i < currentWeeks; i++)
                 {
                     try
                     {  // If record exists, it will do nothing

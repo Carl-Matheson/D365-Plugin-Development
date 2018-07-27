@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="PPSWeek.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdateJobseekerForm.cs" />
     <Compile Include="ValidationPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
