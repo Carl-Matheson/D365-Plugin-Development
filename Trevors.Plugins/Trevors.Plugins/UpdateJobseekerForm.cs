@@ -17,7 +17,7 @@ namespace Training.Plugins
             Entity preJobseeker = (Entity)context.PreEntityImages["Image2"];
             int numberOfWeeksEmployed = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
 
-            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed.ToString();
+            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; //.ToString();
         }
 
     }

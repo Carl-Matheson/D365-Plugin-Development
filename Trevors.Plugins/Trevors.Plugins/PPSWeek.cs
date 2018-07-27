@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 namespace Training.Plugins
 {
+    /* Occurs onCreate of a PPS Week Record */
     public class PPSWeek : IPlugin
     {
 
@@ -46,6 +47,7 @@ namespace Training.Plugins
                 PPSWeek["xrm_reportableamount"] = firstBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
+
             else if (currentWeek == firstPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = firstBreakdown;
@@ -62,11 +64,13 @@ namespace Training.Plugins
                     service.Update(jobseeker);
                 }
             }
+        
            else if (currentWeek < secondPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = secondBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
+
             else if (currentWeek == secondPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = secondBreakdown;
