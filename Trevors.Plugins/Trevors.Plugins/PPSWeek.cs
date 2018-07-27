@@ -16,12 +16,14 @@ namespace Training.Plugins
             Entity PPSWeek = (Entity)context.InputParameters["Target"];
             EntityReference PPSTableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
             // Grabs the PPSTable with all columns
-            Entity PPSTable = service.Retrieve("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"), new ColumnSet(true));
 
             // Variable definitions
+            Entity PPSTable = service.Retrieve("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"), new ColumnSet(true));
             int currentWeek = PPSWeek.GetAttributeValue<int>("xrm_weekactual");
             int iteration = PPSWeek.GetAttributeValue<int>("xrm_ppsiterations");
-            Guid jobseeker = ((EntityReference)PPSWeek.Attributes["xrm_jobseeker"]).Id;
+            Guid jobseekerId = ((EntityReference)PPSWeek.Attributes["xrm_jobseeker"]).Id;
+            Entity jobseeker = service.Retrieve("xrm_applicant", jobseekerId, new ColumnSet(new string[] { "xrm_4weekcomplete", "xrm_13weekcomplete", "xrm_26weekcomplete", "xrm_52weekcomplete" })); 
+
             // 4 Week
             int firstPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod1");
             Money firstBreakdown = PPSTable.GetAttributeValue<Money>("xrm_4wkbreakdown");
@@ -52,9 +54,12 @@ namespace Training.Plugins
 
                 for (int i = 1; i < 4; i++)
                 {
-                        Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseeker);
-                        fetchedJobseeker["xrm_actualized"] = true;
-                        service.Update(fetchedJobseeker);                    
+                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseekerId);
+                    fetchedJobseeker["xrm_actualized"] = true;
+                    service.Update(fetchedJobseeker);
+
+                    jobseeker["xrm_4weekcomplete"] = true;
+                    service.Update(jobseeker);
                 }
             }
            else if (currentWeek < secondPeriod)
@@ -70,9 +75,12 @@ namespace Training.Plugins
 
                 for (int i = 1; i < 13; i++)
                 {
-                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseeker);
+                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseekerId);
                     fetchedJobseeker["xrm_actualized"] = true;
                     service.Update(fetchedJobseeker);
+
+                    jobseeker["xrm_13weekcomplete"] = true;
+                    service.Update(jobseeker);
                 }
             }
             else if (currentWeek < thirdPeriod)
@@ -88,9 +96,12 @@ namespace Training.Plugins
 
                 for (int i = 1; i < 26; i++)
                 {
-                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseeker);
+                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseekerId);
                     fetchedJobseeker["xrm_actualized"] = true;
                     service.Update(fetchedJobseeker);
+
+                    jobseeker["xrm_26weekcomplete"] = true;
+                    service.Update(jobseeker);
                 }
             }
             else if (currentWeek < fourthPeriod)
@@ -106,9 +117,12 @@ namespace Training.Plugins
 
                 for (int i = 1; i < 52; i++)
                 {
-                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseeker);
+                    Entity fetchedJobseeker = getTheRecord(service, i, iteration, jobseekerId);
                     fetchedJobseeker["xrm_actualized"] = true;
                     service.Update(fetchedJobseeker);
+
+                    jobseeker["xrm_52weekcomplete"] = true;
+                    service.Update(jobseeker);
                 }
             }
         }
