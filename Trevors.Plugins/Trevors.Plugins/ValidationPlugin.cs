@@ -16,9 +16,6 @@ namespace Training.Plugins
             IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);
 
             Entity jobseeker = (Entity)context.InputParameters["Target"];
-
-            // Creating Images
-            //Entity postJobseeker = (Entity)context.PostEntityImages["Image"];
             Entity preJobseeker = (Entity)context.PreEntityImages["Image"];
 
             // From Target
@@ -26,50 +23,21 @@ namespace Training.Plugins
             int currentWeeks = jobseeker.GetAttributeValue<int>("xrm_weeksemployed");
 
             int numberOfWeeksEmployed = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
-            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; //.ToString();
+            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; 
 
             // From Pre Image
             int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
-            //int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_previousweeksemployed");
-
-            // From Post Image
             int numberOfIterations = preJobseeker.GetAttributeValue<int>("xrm_ppsiterations");
 
-            //PPS Table Reference
-            EntityReference PPSTableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
-            Entity PPSTable = service.Retrieve("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"), new ColumnSet(true));
-
-            // 4 Week
-            int firstPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod1");
-            Money firstBreakdown = PPSTable.GetAttributeValue<Money>("xrm_4wkbreakdown");
-            Money firstAmount = PPSTable.GetAttributeValue<Money>("xrm_4wkoutcome");
-
-            // 13 Week
-            int secondPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod2");
-            Money secondBreakdown = PPSTable.GetAttributeValue<Money>("xrm_13wkbreakdown");
-            Money secondAmount = PPSTable.GetAttributeValue<Money>("xrm_13wkoutcome");
-           
-            // 26 Week
-            int thirdPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod3");
-            Money thirdBreakdown = PPSTable.GetAttributeValue<Money>("xrm_26wkbreakdown");
-            Money thirdAmount = PPSTable.GetAttributeValue<Money>("xrm_26wkoutcome");
-            
-            // 52 Week
-            int fourthPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod4");
-            Money fourthBreakdown = PPSTable.GetAttributeValue<Money>("xrm_52wkbreakdown");
-            Money fourthAmount = PPSTable.GetAttributeValue<Money>("xrm_52wkoutcome");
-
-            jobseeker["xrm_contracttype"] = previousWeeks.ToString();
-            
             // Creation of PPS Weeks records
             if (preJobseeker.Contains("xrm_pps") && preJobseeker.GetAttributeValue<bool>("xrm_pps") && previousWeeks < currentWeeks)
             {
-                for (int i = 0; i < currentWeeks; i++)
+                for (int i = 1; i <= currentWeeks; i++)
                 {
                     try
                     {  // If record exists, it will do nothing
                         getTheRecord(service, jobseeker, i, numberOfIterations);
-                   
+
                     } // When the record doesn't exist
                     catch (ArgumentOutOfRangeException)
                     {
@@ -78,56 +46,49 @@ namespace Training.Plugins
 
                 }
             }
+
             // Deletion, JS has exited PPS - calculate profit-loss
             else if (currentWeeks < previousWeeks)
             {
-                if(previousWeeks > 0 && previousWeeks < firstPeriod) // Exit in week 1-3
+                try
                 {
-
-                    decimal loss = previousWeeks * firstBreakdown.Value;
-                    Money economicLoss = new Money(loss);
-                    try
+                    Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
+                    // If statement to prevent the code from happening on the threshold weeks
+                    if (PPSWeek.GetAttributeValue<Money>("xrm_actualamount").Value != 0)
                     {
-                        Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
+                        // Intialize loss, turns into money later. 
+                        decimal totalLoss = 0m;
+                        for (int i = 0; i < getTheNonActualizedRecords(service, jobseeker, numberOfIterations).Entities.Count; i++)
+                        {
+                            Entity currentWeek = getTheNonActualizedRecords(service, jobseeker, numberOfIterations)[i];
+                            decimal loss = currentWeek.GetAttributeValue<Money>("xrm_reportableamount").Value;
+                            totalLoss = totalLoss + loss;
+                            service.Update(currentWeek);
+
+                        }
+                        Money economicLoss = new Money(totalLoss);
+
                         PPSWeek["xrm_economiclossimmediate"] = economicLoss;
                         service.Update(PPSWeek);
                     }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        throw new InvalidPluginExecutionException("Out of range exception");
-                    }
-                }
-                else if(previousWeeks > firstPeriod && previousWeeks < secondPeriod) // Exit in week 5 - 12
-                {
-                    decimal loss = (previousWeeks - firstPeriod) * secondBreakdown.Value;
-                    Money economicLoss = new Money(loss);
-                    try
-                    {
-                        Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
-                        PPSWeek["xrm_economiclossimmediate"] = economicLoss;
-                        service.Update(PPSWeek);
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
 
+                    // Creates static count
+                    int count = getThecurrentIterationRecords(service, jobseeker, numberOfIterations).Entities.Count;
+                    // Setting the current iteration to old
+                    for (int i = 0; i < count; i++)
+                    {
+                        Entity currentWeek = getThecurrentIterationRecords(service, jobseeker, numberOfIterations)[i];
+                        currentWeek["xrm_comments"] = count.ToString();
+                        currentWeek["xrm_iterationstatus"] = false;
+                        service.Update(currentWeek);
                     }
                 }
-                else if (previousWeeks > secondPeriod && previousWeeks < thirdPeriod) // Exit in week 13 - 25
+                // Unknown error occurs; Mainly that the records don't exist. 
+                catch (ArgumentOutOfRangeException)
                 {
-                    decimal loss = (previousWeeks - secondPeriod) * thirdBreakdown.Value;
-                    Money economicLoss = new Money(loss);
-                    Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
-                    PPSWeek["xrm_economiclossimmediate"] = economicLoss;
-                    service.Update(PPSWeek);
+
                 }
-                else if(previousWeeks > thirdPeriod && previousWeeks < fourthPeriod) // Exit in week 27 - 51
-                {
-                    decimal loss = (previousWeeks - thirdPeriod) * fourthBreakdown.Value;
-                    Money economicLoss = new Money(loss);
-                    Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
-                    PPSWeek["xrm_economiclossimmediate"] = economicLoss;
-                    service.Update(PPSWeek);
-                }
+
             }
         }
 
@@ -137,14 +98,14 @@ namespace Training.Plugins
             // Snippet for querying records
             QueryExpression query = new QueryExpression();
             query.EntityName = "xrm_postplacementsupport";
-            query.ColumnSet = new ColumnSet("xrm_weekplugin", "xrm_jobseeker", "xrm_ppsiterations");
+            query.ColumnSet = new ColumnSet("xrm_weekactual", "xrm_jobseeker", "xrm_ppsiterations", "xrm_actualamount");
 
             query.Criteria = new FilterExpression();
             query.Criteria.FilterOperator = LogicalOperator.And;
 
             query.Criteria.Conditions.Add
                 (
-                new ConditionExpression("xrm_weekplugin", ConditionOperator.Equal, week)
+                new ConditionExpression("xrm_weekactual", ConditionOperator.Equal, week)
                 );
             query.Criteria.Conditions.Add
                 (
@@ -154,19 +115,19 @@ namespace Training.Plugins
                 (
                 new ConditionExpression("xrm_ppsiterations", ConditionOperator.Equal, numberOfIterations)
                 );
-        
+
             EntityCollection entities = service.RetrieveMultiple(query);
 
             return entities[0];
         }
 
         // Filter for non-actualized records
-        private static Entity getTheNonActualizedRecords(IOrganizationService service, Entity jobseeker, int numberOfIterations)
+        private static EntityCollection getTheNonActualizedRecords(IOrganizationService service, Entity jobseeker, int numberOfIterations)
         {
             // Snippet for querying records
             QueryExpression query = new QueryExpression();
             query.EntityName = "xrm_postplacementsupport";
-            query.ColumnSet = new ColumnSet("xrm_weekplugin", "xrm_jobseeker", "xrm_ppsiterations", "xrm_actualized");
+            query.ColumnSet = new ColumnSet("xrm_jobseeker", "xrm_ppsiterations", "xrm_actualized", "xrm_reportableamount", "xrm_actualamount");
 
             query.Criteria = new FilterExpression();
             query.Criteria.FilterOperator = LogicalOperator.And;
@@ -185,7 +146,35 @@ namespace Training.Plugins
 
             EntityCollection entities = service.RetrieveMultiple(query);
 
-            return entities[0];
+            return entities;
+        }
+
+        // Filter for current iteration records
+        private static EntityCollection getThecurrentIterationRecords(IOrganizationService service, Entity jobseeker, int numberOfIterations)
+        {
+            // Snippet for querying records
+            QueryExpression query = new QueryExpression();
+            query.EntityName = "xrm_postplacementsupport";
+            query.ColumnSet = new ColumnSet("xrm_jobseeker", "xrm_ppsiterations", "xrm_iterationstatus");
+
+            query.Criteria = new FilterExpression();
+            query.Criteria.FilterOperator = LogicalOperator.And;
+            query.Criteria.Conditions.Add
+                (
+                new ConditionExpression("xrm_jobseeker", ConditionOperator.Equal, jobseeker.Id)
+                );
+            query.Criteria.Conditions.Add
+                (
+                new ConditionExpression("xrm_ppsiterations", ConditionOperator.Equal, numberOfIterations)
+                );
+            query.Criteria.Conditions.Add
+                (
+                new ConditionExpression("xrm_iterationstatus", ConditionOperator.Equal, true)
+                );
+
+            EntityCollection entities = service.RetrieveMultiple(query);
+
+            return entities;
         }
 
         private void createEntity(IOrganizationService service, Entity jobseeker, String jobseekerId, int week, int numberOfIterations)
@@ -194,13 +183,12 @@ namespace Training.Plugins
             // Creating & connecting the lookup
             EntityReference jobseekerValue = new EntityReference("xrm_applicant", jobseeker.Id);
             PPSWeek["xrm_jobseeker"] = jobseekerValue;
-            PPSWeek["xrm_name"] = "PPS WEEK " + (week + 1);
-            PPSWeek["xrm_weekplugin"] = week;
-            PPSWeek["xrm_weekactual"] = (week + 1);
+            PPSWeek["xrm_name"] = jobseekerValue.Name + "PPS WEEK " + week;
+            PPSWeek["xrm_weekactual"] = week;
             PPSWeek["xrm_ppsiterations"] = numberOfIterations;
             PPSWeek["xrm_iterationstatus"] = true;
             PPSWeek["xrm_date"] = DateTime.Now;
-            PPSWeek["xrm_actualhours"] = 0m; 
+            PPSWeek["xrm_actualhours"] = 0m;
             // Linking the PPSTable
             EntityReference ppstableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
             PPSWeek["xrm_ppstable"] = ppstableValue;
