@@ -74,10 +74,11 @@ namespace Training.Plugins
 
                     // Creates static count
                     int count = getThecurrentIterationRecords(service, jobseeker, numberOfIterations).Entities.Count;
+                    jobseeker["xrm_contracttype"] = count.ToString();
                     // Setting the current iteration to old
                     for (int i = 0; i < count; i++)
                     {
-                        Entity currentWeek = getThecurrentIterationRecords(service, jobseeker, numberOfIterations)[i];
+                        Entity currentWeek = getThecurrentIterationRecords(service, jobseeker, numberOfIterations)[0];
                         currentWeek["xrm_comments"] = count.ToString();
                         currentWeek["xrm_iterationstatus"] = false;
                         service.Update(currentWeek);
