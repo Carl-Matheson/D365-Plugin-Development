@@ -30,3 +30,14 @@ D:\Carl\Documents\GitHub\D365-Plugin-Development\Trevors.Plugins\Trevors.Plugins
 D:\Carl\Documents\GitHub\D365-Plugin-Development\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csproj.CoreCompileInputs.cache
 D:\Carl\Documents\GitHub\D365-Plugin-Development\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.dll
 D:\Carl\Documents\GitHub\D365-Plugin-Development\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.pdb
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Trevors.Plugins.dll
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Trevors.Plugins.pdb
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Xrm.Sdk.dll
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+C:\dev\Trevors.Plugins\Trevors.Plugins\bin\Debug\Microsoft.Xrm.Sdk.xml
+C:\dev\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csprojAssemblyReference.cache
+C:\dev\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csproj.CoreCompileInputs.cache
+C:\dev\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.csproj.CopyComplete
+C:\dev\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.dll
+C:\dev\Trevors.Plugins\Trevors.Plugins\obj\Debug\Trevors.Plugins.pdb

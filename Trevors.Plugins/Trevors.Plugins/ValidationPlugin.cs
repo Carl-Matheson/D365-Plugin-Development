@@ -50,27 +50,42 @@ namespace Training.Plugins
             // Deletion, JS has exited PPS - calculate profit-loss
             else if (currentWeeks < previousWeeks)
             {
+                jobseeker["xrm_4weekactionedlookup"] = null;
+                jobseeker["xrm_4weekactioned"] = false;
+                jobseeker["xrm_4weekcomment"] = null;
+
+                jobseeker["xrm_13weekactionedlookup"] = null;
+                jobseeker["xrm_13weekactioned"] = false;
+                jobseeker["xrm_13weekcomment"] = null;
+
+                jobseeker["xrm_26weekactionedlookup"] = null;
+                jobseeker["xrm_26weekactioned"] = false;
+                jobseeker["xrm_26weekcomment"] = null;
+
+                jobseeker["xrm_52weekactionedlookup"] = null;
+                jobseeker["xrm_52weekactioned"] = false;
+                jobseeker["xrm_52weekcomment"] = null;
+
                 try
                 {
                     Entity PPSWeek = getTheRecord(service, jobseeker, previousWeeks, numberOfIterations);
                     // If statement to prevent the code from happening on the threshold weeks
-                    if (PPSWeek.GetAttributeValue<Money>("xrm_actualamount").Value != 0)
+       
+                    // Intialize loss, turns into money later. 
+                    decimal totalLoss = 0m;
+                    for (int i = 0; i < getTheNonActualizedRecords(service, jobseeker, numberOfIterations).Entities.Count; i++)
                     {
-                        // Intialize loss, turns into money later. 
-                        decimal totalLoss = 0m;
-                        for (int i = 0; i < getTheNonActualizedRecords(service, jobseeker, numberOfIterations).Entities.Count; i++)
-                        {
-                            Entity currentWeek = getTheNonActualizedRecords(service, jobseeker, numberOfIterations)[i];
-                            decimal loss = currentWeek.GetAttributeValue<Money>("xrm_reportableamount").Value;
-                            totalLoss = totalLoss + loss;
-                            service.Update(currentWeek);
+                        Entity currentWeek = getTheNonActualizedRecords(service, jobseeker, numberOfIterations)[i];
+                        decimal loss = currentWeek.GetAttributeValue<Money>("xrm_reportableamount").Value;
+                        totalLoss = totalLoss + loss;
+                        service.Update(currentWeek);
 
-                        }
-                        Money economicLoss = new Money(totalLoss);
-
-                        PPSWeek["xrm_economiclossimmediate"] = economicLoss;
-                        service.Update(PPSWeek);
                     }
+                    Money economicLoss = new Money(totalLoss);
+
+                    PPSWeek["xrm_economiclossimmediate"] = economicLoss;
+                    service.Update(PPSWeek);
+
 
                     // Creates static count
                     int count = getThecurrentIterationRecords(service, jobseeker, numberOfIterations).Entities.Count;
