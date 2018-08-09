@@ -15,14 +15,15 @@ namespace Training.Plugins
             IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);
 
             Entity PPSWeek = (Entity)context.InputParameters["Target"];
-            EntityReference PPSTableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
+            Guid tableId = ((EntityReference)PPSWeek.Attributes["xrm_ppstable"]).Id;
             // Grabs the PPSTable with all columns
 
             // Variable definitions
-            Entity PPSTable = service.Retrieve("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"), new ColumnSet(true));
+            Entity PPSTable = service.Retrieve("xrm_ppstable", tableId, new ColumnSet(true));
             int currentWeek = PPSWeek.GetAttributeValue<int>("xrm_weekactual");
             int iteration = PPSWeek.GetAttributeValue<int>("xrm_ppsiterations");
             Guid jobseekerId = ((EntityReference)PPSWeek.Attributes["xrm_jobseeker"]).Id;
+            // Old, but some code uses the 'complete' values
             Entity jobseeker = service.Retrieve("xrm_applicant", jobseekerId, new ColumnSet(new string[] { "xrm_4weekcomplete", "xrm_13weekcomplete", "xrm_26weekcomplete", "xrm_52weekcomplete" })); 
 
             // 4 Week

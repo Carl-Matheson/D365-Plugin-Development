@@ -22,12 +22,15 @@ namespace Training.Plugins
             String jobseekerId = jobseeker.GetAttributeValue<String>("xrm_name");
             int currentWeeks = jobseeker.GetAttributeValue<int>("xrm_weeksemployed");
 
+            // From Pre Image
             int numberOfWeeksEmployed = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
             jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; 
-
-            // From Pre Image
             int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
             int numberOfIterations = preJobseeker.GetAttributeValue<int>("xrm_ppsiterations");
+            Guid tableId = ((EntityReference) preJobseeker.Attributes["xrm_fundinglevel"]).Id;
+            decimal employmentBenchmark = preJobseeker.GetAttributeValue<decimal>("xrm_employmentbenchmarkdecimal");
+            DateTime anchorDate = preJobseeker.GetAttributeValue<DateTime>("xrm_anchor_date");
+
 
             // Creation of PPS Weeks records
             if (preJobseeker.Contains("xrm_pps") && preJobseeker.GetAttributeValue<bool>("xrm_pps") && previousWeeks < currentWeeks)
@@ -41,7 +44,7 @@ namespace Training.Plugins
                     } // When the record doesn't exist
                     catch (ArgumentOutOfRangeException)
                     {
-                        createEntity(service, jobseeker, jobseekerId, i, numberOfIterations);
+                        createEntity(service, jobseeker, jobseekerId, i, numberOfIterations, tableId, employmentBenchmark, anchorDate);
                     }
 
                 }
@@ -193,7 +196,7 @@ namespace Training.Plugins
             return entities;
         }
 
-        private void createEntity(IOrganizationService service, Entity jobseeker, String jobseekerId, int week, int numberOfIterations)
+        private void createEntity(IOrganizationService service, Entity jobseeker, String jobseekerId, int week, int numberOfIterations, Guid tableId, decimal employmentBenchmark, DateTime anchorDate)
         {
             Entity PPSWeek = new Entity("xrm_postplacementsupport");
             // Creating & connecting the lookup
@@ -205,8 +208,11 @@ namespace Training.Plugins
             PPSWeek["xrm_iterationstatus"] = true;
             PPSWeek["xrm_date"] = DateTime.Now;
             PPSWeek["xrm_actualhours"] = 0m;
+            PPSWeek["xrm_employmentbenchmark"] = employmentBenchmark;
+            PPSWeek["xrm_economiclossimmediate"] = new Money(0m); 
+            PPSWeek["xrm_anchordate"] = anchorDate;
             // Linking the PPSTable
-            EntityReference ppstableValue = new EntityReference("xrm_ppstable", new Guid("7876a1fe-b188-e811-a964-000d3ad1c715"));
+            EntityReference ppstableValue = new EntityReference("xrm_ppstable", tableId);
             PPSWeek["xrm_ppstable"] = ppstableValue;
 
             service.Create(PPSWeek);
