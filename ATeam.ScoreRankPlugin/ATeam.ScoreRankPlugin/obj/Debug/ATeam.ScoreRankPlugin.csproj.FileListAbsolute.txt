@@ -1,0 +1,13 @@
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\ATeam.ScoreRankPlugin.dll
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\ATeam.ScoreRankPlugin.pdb
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Xrm.Sdk.dll
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Xrm.Sdk.xml
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\obj\Debug\ATeam.ScoreRankPlugin.csprojAssemblyReference.cache
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\obj\Debug\ATeam.ScoreRankPlugin.csproj.CoreCompileInputs.cache
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\obj\Debug\ATeam.ScoreRankPlugin.csproj.CopyComplete
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\obj\Debug\ATeam.ScoreRankPlugin.dll
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\obj\Debug\ATeam.ScoreRankPlugin.pdb
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll
+C:\dev\ATeam.ScoreRankPlugin\ATeam.ScoreRankPlugin\bin\Debug\Microsoft.Xrm.Sdk.Workflow.xml
