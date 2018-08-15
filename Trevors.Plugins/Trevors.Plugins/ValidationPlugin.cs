@@ -214,6 +214,12 @@ namespace Training.Plugins
             EntityReference ppstableValue = new EntityReference("xrm_ppstable", tableId);
             PPSWeek["xrm_ppstable"] = ppstableValue;
 
+            if (week != 52) {
+                PPSWeek["xrm_date"] = anchorDate.AddDays(week * 7);
+            } else {
+                PPSWeek["xrm_date"] = anchorDate.AddDays(365);
+            }
+
             service.Create(PPSWeek);
         }
     }

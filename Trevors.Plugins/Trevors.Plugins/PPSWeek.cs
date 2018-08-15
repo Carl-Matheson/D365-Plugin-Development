@@ -22,9 +22,22 @@ namespace Training.Plugins
             Entity PPSTable = service.Retrieve("xrm_ppstable", tableId, new ColumnSet(true));
             int currentWeek = PPSWeek.GetAttributeValue<int>("xrm_weekactual");
             int iteration = PPSWeek.GetAttributeValue<int>("xrm_ppsiterations");
+            DateTime date = PPSWeek.GetAttributeValue<DateTime>("xrm_date");
             Guid jobseekerId = ((EntityReference)PPSWeek.Attributes["xrm_jobseeker"]).Id;
             // Old, but some code uses the 'complete' values
-            Entity jobseeker = service.Retrieve("xrm_applicant", jobseekerId, new ColumnSet(new string[] { "xrm_4weekcomplete", "xrm_13weekcomplete", "xrm_26weekcomplete", "xrm_52weekcomplete" })); 
+            Entity jobseeker = service.Retrieve("xrm_applicant", jobseekerId, new ColumnSet(new string[] { "xrm_4weekcomplete",
+                "xrm_13weekcomplete",
+                "xrm_26weekcomplete",
+                "xrm_52weekcomplete",
+                "xrm_4weeksclaimdate",
+                "xrm_4weeksclaimamount",
+                "xrm_13weeksclaimdate",
+                "xrm_13weeksclaimamount",
+                "xrm_26weeksclaimdate",
+                "xrm_26weeksclaimamount",
+                "xrm_52weeksclaimdate",
+                "xrm_52weeksclaimamount"}
+            )); 
 
             // 4 Week
             int firstPeriod = PPSTable.GetAttributeValue<int>("xrm_outcomeperiod1");
@@ -48,12 +61,14 @@ namespace Training.Plugins
                 PPSWeek["xrm_reportableamount"] = firstBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
-
+            // Threshold Week
             else if (currentWeek == firstPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = firstBreakdown;
                 PPSWeek["xrm_actualamount"] = firstAmount;
                 PPSWeek["xrm_actualized"] = true;
+                jobseeker["xrm_4weeksclaimamount"] = firstAmount;
+                jobseeker["xrm_4weeksclaimdate"] = date; 
 
                 for (int i = 1; i < 4; i++)
                 {
@@ -71,7 +86,7 @@ namespace Training.Plugins
                 PPSWeek["xrm_reportableamount"] = secondBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
-
+            // Threshold Week
             else if (currentWeek == secondPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = secondBreakdown;
@@ -93,6 +108,7 @@ namespace Training.Plugins
                 PPSWeek["xrm_reportableamount"] = thirdBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
+            // Threshold Week
             else if (currentWeek == thirdPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = thirdBreakdown;
@@ -114,6 +130,7 @@ namespace Training.Plugins
                 PPSWeek["xrm_reportableamount"] = fourthBreakdown;
                 PPSWeek["xrm_actualamount"] = new Money(0m);
             }
+            // Threshold Week
             else if (currentWeek == fourthPeriod)
             {
                 PPSWeek["xrm_reportableamount"] = fourthBreakdown;
