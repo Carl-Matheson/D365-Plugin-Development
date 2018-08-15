@@ -23,9 +23,8 @@ namespace Training.Plugins
             int currentWeeks = jobseeker.GetAttributeValue<int>("xrm_weeksemployed");
 
             // From Pre Image
-            int numberOfWeeksEmployed = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
-            jobseeker["xrm_previousweeksemployed"] = numberOfWeeksEmployed; 
             int previousWeeks = preJobseeker.GetAttributeValue<int>("xrm_weeksemployed");
+            jobseeker["xrm_previousweeksemployed"] = previousWeeks;
             int numberOfIterations = preJobseeker.GetAttributeValue<int>("xrm_ppsiterations");
             Guid tableId = ((EntityReference) preJobseeker.Attributes["xrm_fundinglevel"]).Id;
             decimal employmentBenchmark = preJobseeker.GetAttributeValue<decimal>("xrm_employmentbenchmarkdecimal");
